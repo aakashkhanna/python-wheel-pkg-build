@@ -9,15 +9,11 @@ echo "CONFIG_FILE_PATH:         ${CONFIG_FILE_PATH}"
 echo;
 echo "PUBLISH:                  ${PUBLISH}"
 echo;
-
+echo "RUN_TESTS:                ${RUN_TESTS}"
+echo;
 echo "Changing directory to project..."
 cd /project
 
-
-# echo "Setting artifactory target and source in poetry..."
-# poetry config repositories.bxti_artifactory_target ${ARTIFACTORY_TARGET}
-# poetry config repositories.bxti_artifactory_source ${ARTIFACTORY_SOURCE}
-# echo;
 { # try
 
     echo "Installing poetry..."
@@ -90,7 +86,7 @@ then
     { # try
     
     echo "Publishing package.."
-    poetry publish | tee publish_info.txt
+    poetry publish
     echo "Copying artifacts to root.."
     cp -a /project/output/. /
     echo;
