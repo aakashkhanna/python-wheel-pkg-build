@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "Running Poetry Package Build Script"
 
 echo "SOURCE_DIR:               ${SOURCE_DIR}"
@@ -26,6 +27,7 @@ cd /project
 } || { # catch
      
     echo "Failed while installing poetry."
+    exit 1
 }
 
 { # try
@@ -37,6 +39,7 @@ cd /project
 } || { # catch
      
     echo "Failed while extracting version."
+    exit 1
 }
 
 { # try
@@ -47,6 +50,7 @@ cd /project
 } || { # catch
      
     echo "Failed while updating poetry version."
+    exit 1
 }
 
 { # try
@@ -58,6 +62,7 @@ cd /project
 } || { # catch
      
     echo "Failed while building poetry."
+    exit 1
 }
 
 if [ -n "$RUN_TESTS" ];
@@ -75,6 +80,7 @@ then
     } || { # catch
         
         echo "Failed while running tests."
+        exit 1
     }
 fi
 
@@ -85,13 +91,14 @@ then
     
     echo "Publishing package.."
     poetry publish | tee publish_info.txt
+    echo "Copying artifacts to root.."
+    cp -a /project/output/. /
     echo;
 
     } || { # catch
          
         echo "Failed while publishing package."
+        exit 1
     }
 fi
 
-echo "Copying artifacts to root.."
-cp -a /project/output/. /
