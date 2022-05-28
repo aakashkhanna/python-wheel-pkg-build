@@ -67,10 +67,9 @@ then
     { # try
     
     echo "Running tests."
-    echo "Generating HTML Report."
-    pytest tests/ --html-report=./report
-    echo "Generating Unit Test Coverage Report."
-    pytest --cov=dotjson  --cov-report=html:./report
+    
+    echo "Generating HTML Report and Unit test coverage."
+    poetry run pytest
     echo;
 
     } || { # catch

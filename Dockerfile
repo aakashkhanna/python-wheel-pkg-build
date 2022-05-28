@@ -5,11 +5,7 @@ COPY ./build.sh /build/
 WORKDIR  /build
 
 RUN chmod +x build.sh \
-    && pip install poetry \
-    && pip install pytest \
-    && pip install pytest-html-reporter \
-    && pip install pytest-cov
-
+    && pip install poetry
 
 ONBUILD ARG SOURCE_DIR="src"
 ONBUILD ARG GIT_DIR=".git"
