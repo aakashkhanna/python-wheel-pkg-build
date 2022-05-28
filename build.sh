@@ -17,27 +17,80 @@ cd /project
 # poetry config repositories.bxti_artifactory_target ${ARTIFACTORY_TARGET}
 # poetry config repositories.bxti_artifactory_source ${ARTIFACTORY_SOURCE}
 # echo;
+{ # try
 
-echo "Installing poetry..."
-poetry config virtualenvs.create false
-poetry install
+    echo "Installing poetry..."
+    poetry config virtualenvs.create false
+    poetry install
 
-version=`cat version.txt`
-version=`sed 's/-/+/1' <<< $version`
-echo "Version: ${version}"
+} || { # catch
+     
+    echo "Failed while installing poetry."
+}
 
-echo "Updating version to ${version} in poetry..."
-poetry version $version
+{ # try
 
-echo "Building package..."
-poetry build
-echo;
+    version=`cat version.txt`
+    version=`sed 's/-/+/1' <<< $version`
+    echo "Version: ${version}"
+
+} || { # catch
+     
+    echo "Failed while extracting version."
+}
+
+{ # try
+    
+    echo "Updating version to ${version} in poetry..."
+    poetry version $version
+
+} || { # catch
+     
+    echo "Failed while updating poetry version."
+}
+
+{ # try
+    
+    echo "Building package..."
+    poetry build
+    echo;
+
+} || { # catch
+     
+    echo "Failed while building poetry."
+}
+
+if [ -n "$RUN_TESTS" ];
+then
+    
+    { # try
+    
+    echo "Running tests."
+    echo "Generating HTML Report."
+    pytest tests/ --html-report=./report
+    echo "Generating Unit Test Coverage Report."
+    pytest --cov=dotjson  --cov-report=html:./report
+    echo;
+
+    } || { # catch
+        
+        echo "Failed while running tests."
+    }
+fi
 
 if [ -n "$PUBLISH" ];
 then
+    
+    { # try
+    
     echo "Publishing package.."
     poetry publish | tee publish_info.txt
     echo;
+
+    } || { # catch
+         
+        echo "Failed while publishing package."
+    }
 fi
 
 echo "Copying artifacts to root.."
