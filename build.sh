@@ -69,7 +69,7 @@ then
     echo "Running tests."
     
     echo "Generating test coverage."
-    poetry run pytest > pytest-coverage.txt
+    poetry run pytest | tee pytest-coverage.txt
     echo;
 
     } || { # catch
