@@ -68,8 +68,8 @@ then
     
     echo "Running tests."
     
-    echo "Generating HTML Report and Unit test coverage."
-    poetry run pytest
+    echo "Generating test coverage."
+    poetry run pytest | tee pytest-coverage.txt
     echo;
 
     } || { # catch
