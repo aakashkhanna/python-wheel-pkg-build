@@ -19,6 +19,7 @@ ONBUILD ARG RUN_TESTS
 ONBUILD COPY --from=gitversion /repo/version.txt /project/
 ONBUILD COPY ${SOURCE_DIR} /project
 ONBUILD COPY ${GIT_DIR} /project/.git
+ONBUILD COPY README.md /project
 
 ONBUILD RUN mkdir /project/output
 
